@@ -3,11 +3,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SunOut_ERP_Backend.DataAccess
 {
-    public class UserDbContext : DbContext
+    public class SunOutDbContext : DbContext
     {
         public DbSet<User> Users { get; set; }
 
-        public UserDbContext(DbContextOptions options) : base(options) { }
+        public SunOutDbContext(DbContextOptions options) : base(options) { }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -15,7 +15,7 @@ namespace SunOut_ERP_Backend.DataAccess
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>(u => u.HasKey(user => user.username));
+            modelBuilder.Entity<User>(u => u.HasKey(user => user.Username));
         }
     }
 }
