@@ -15,7 +15,13 @@ namespace SunOut_ERP_Backend.DataAccess
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>(u => u.HasKey(user => user.Username));
+            modelBuilder.Entity<User>(
+                u => {
+                    u.HasKey(user => user.Username);
+                    u.Property(user => user.Username).HasColumnType("varchar(20)");
+                    u.Property(user => user.PasswordHash).HasColumnType("varchar(64)");
+                }
+            );
         }
     }
 }
