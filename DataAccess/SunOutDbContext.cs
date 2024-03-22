@@ -13,13 +13,14 @@ namespace SunOut_ERP_Backend.DataAccess
         {
             optionsBuilder.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB; Initial Catalog=SunOutDb");
         }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>(
                 u => {
                     u.HasKey(user => user.Username);
                     u.Property(user => user.Username).HasColumnType("varchar(20)");
-                    u.Property(user => user.PasswordHash).HasColumnType("varchar(64)");
+                    u.Property(user => user.PasswordHash).HasColumnType("varchar(100)");
                 }
             );
         }
