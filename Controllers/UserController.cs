@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using SunOut_ERP_Backend.DataAccess.UnitOfWork;
 using SunOut_ERP_Backend.Domain;
 
 namespace SunOut_ERP_Backend.Controllers
@@ -8,32 +9,30 @@ namespace SunOut_ERP_Backend.Controllers
     [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
+        private readonly IUnitOfWork Uow;
         private readonly PasswordHasher<User> _passwordHasher;
 
-        public UserController()
+        public UserController(IUnitOfWork uow)
         {
+            Uow = uow;
             _passwordHasher = new PasswordHasher<User>();
         }
 
-        // GET: api/user/login
+        // POST: api/user/login
         [HttpPost("login")]
-        public ActionResult Login(User u)
+        public async Task<ActionResult> Login(User u)
         {
+            User? user = await Uow.UserRepository.GetOneByUsername(u.Username);
 
-            // get user from db: var user = GetUser(u.Username)
+            if (user != null)
+            {
+                var result = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, u.PasswordHash);
 
-            //if (user != null)
-            //{
-            //    var result = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, u.PasswordHash);
-
-            //    if (result == PasswordVerificationResult.Success)
-            //    {
-            //        // Success
-            //        // ...
-            //        return Ok("....");
-            //    }
-            //}
-
+                if (result == PasswordVerificationResult.Success)
+                {
+                    return Ok();
+                }
+            }
             return Unauthorized("Invalid credentials");
         }
     }
