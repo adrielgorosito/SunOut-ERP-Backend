@@ -30,7 +30,7 @@ namespace SunOut_ERP_Backend.Controllers
 
                 if (result == PasswordVerificationResult.Success)
                 {
-                    return Ok();
+                    return Ok(user);
                 }
             }
             return Unauthorized("Invalid credentials");
